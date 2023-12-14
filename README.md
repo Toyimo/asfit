@@ -2,7 +2,7 @@
 
 ALGLIB Spline Fitting Library
 
-## 文件结构  
+## File Structure  
 
 ```bash
 ├── CMakeLists.txt
@@ -17,4 +17,32 @@ ALGLIB Spline Fitting Library
     ├── demo.cpp
     ├── include
     └── lib
+```
+
+## How to use 
+
+1. Create Folder and Excute CMAKE Command
+
+```bash
+mkdir build
+cd build
+cmake ..
+make & make install
+```
+
+2. Copy the `include` and `lib` folder from `install` to `example`
+
+```bash
+cp install/include example
+cp install/lib example
+```
+
+3. Jump into `example` folder and excute command
+
+```bash
+cd example
+mkdir build
+cd build
+cmake ..
+make
 ```
