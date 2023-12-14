@@ -5,5 +5,4 @@ install
 tests
 example/include/*
 example/lib/*
-*.txt
 *.html

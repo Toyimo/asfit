@@ -33,8 +33,7 @@ make & make install
 2. Copy the `include` and `lib` folder from `install` to `example`
 
 ```bash
-cp install/include example
-cp install/lib example
+cp -r install/* example
 ```
 
 3. Jump into `example` folder and excute command
