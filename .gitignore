@@ -1,0 +1,9 @@
+.vscode
+.DS_Store
+build
+install
+tests
+example/include/*
+example/lib/*
+*.txt
+*.html
