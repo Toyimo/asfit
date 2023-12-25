@@ -1,7 +1,7 @@
 import geojson
 
-def xy_2_line():
-    with open("build/output.txt") as file:
+def xy_2_line(input, output):
+    with open(input) as file:
         points = []
         for line in file:
             data = line.split(" ")
@@ -10,7 +10,9 @@ def xy_2_line():
             points.append(geojson.Point((x, y), precision = 10))
         gline = geojson.LineString(points)
         feature = geojson.Feature(geometry = gline)
-        with open("build/spline.geojson", 'w') as of:
+        with open(output, 'w') as of:
             geojson.dump(feature, of)
 
-xy_2_line()
+# xy_2_line("build/frenet_reference_line.txt", "build/frenet_reference_line.geojson")
+xy_2_line("build/output.txt", "build/spline.geojson")
+# xy_2_line("build/output-3.txt", "build/spline-4.geojson")

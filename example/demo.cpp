@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "alglib_spline_fitting.h"
+#include "chp_spline_fitting.h"
 
 /* Split string by token, and save it into a list.*/
 template<typename T>
@@ -82,6 +83,29 @@ bool reader(const std::string& file_path, std::list<double>& x, std::list<double
     }
 }
 
+/* write data to file.*/
+void writer(const std::string& filename, std::vector<std::vector<double>>& result)
+{
+    std::ofstream myfile(filename);
+    if (myfile.is_open())
+    {
+        for (int i = 0; i < result.at(0).size(); i++)
+        {
+            double xi = result.at(0).at(i);
+            double yi = result.at(1).at(i);
+            double zi = result.at(2).at(i);
+            myfile << std::to_string(xi) << " " << std::to_string(yi) << " " << std::to_string(zi) << " "
+                   << "\n";
+        }
+        myfile.close();
+        std::cout << "File written successfully.\n";
+    }
+    else
+    {
+        std::cout << "Unable to open file.\n";
+    }
+}
+
 /* Save data to vector.*/
 bool convertor(std::list<double>& src, std::vector<double>& target)
 {
@@ -125,8 +149,8 @@ int main(int argc, char **argv)
     // * x - abscissas
     // * y - vector of experimental data, straight line with small noise
     //
-    int base_function_num = 50;
-    double lambdans = 1e-3;
+    int base_function_num = 30;
+    double lambdans = 1e-4;
 
     // step 01. read and convert the data
     std::list<double> x_list, y_list, z_list;
@@ -138,27 +162,21 @@ int main(int argc, char **argv)
 
     // step 02. use class
     std::vector<std::vector<double>> result;
-    AlglibSplineFitting splinefitting;
-    if(!splinefitting.fitting(x_vec, y_vec, z_vec, result, AlglibSplineFitting::ASF_NORMAL)){
+    AlglibSplineFitting alglib_splinefitting;
+    alglib_splinefitting.lambdans() = lambdans;
+    alglib_splinefitting.base_function_num() = base_function_num;
+    if(!alglib_splinefitting.fitting(x_vec, y_vec, z_vec, result, AlglibSplineFitting::ASF_NORMAL)){
         std::cout << "ERROR: alglib spline fitting failed.\n";
     }
+    writer("output.alglib.txt", result);
 
-    std::ofstream myfile("output.txt");
-    if (myfile.is_open()) {
-        for(int i = 0; i < result.at(0).size(); i++){
-            double xi = result.at(0).at(i);
-            double yi = result.at(1).at(i);
-            double zi = result.at(2).at(i);
-            myfile << 
-                std::to_string(xi) << " " << 
-                std::to_string(yi) << " " << 
-                std::to_string(zi) << " " << 
-                "\n";
-        }
-        myfile.close();
-        std::cout << "File written successfully.\n";
-    } else {
-        std::cout << "Unable to open file.\n";
+    std::vector<std::vector<double>>().swap(result);
+    ConcaveHullParamSplineFitting chp_splinefitting;
+    chp_splinefitting.lambdans() = lambdans;
+    chp_splinefitting.base_function_num() = base_function_num;
+    if (!chp_splinefitting.fitting(x_vec, y_vec, z_vec, result)){
+        std::cout << "ERROR: chp spline fitting failed.\n";
     }
+    writer("output.chu.txt", result);
     return 0;
 }

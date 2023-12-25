@@ -1,6 +1,7 @@
 .vscode
 .DS_Store
 build
+data
 install
 tests
 example/include/*

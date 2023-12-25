@@ -18,7 +18,7 @@ bool AlglibSplineFitting::fitting(
     const std::vector<double>& zarray,
     std::vector<std::vector<double>>& result,
     ASFMode mode,
-    int density)
+    double density)
 {
     if(mode == ASF_PARAM){
         return fitting_param(xarray, yarray, zarray, result, density); 
@@ -27,12 +27,61 @@ bool AlglibSplineFitting::fitting(
     }
 }
 
+bool AlglibSplineFitting::fitting(
+    const std::vector<double>& xarray, 
+    const std::vector<double>& yarray, 
+    const std::vector<double>& zarray,
+    const std::vector<double>& sarray,
+    std::vector<std::vector<double>>& result,
+    double density)
+{
+    // step 01. check value
+    if(sarray.size() == 0){
+        std::cout << "ERROR.fitting(): sarray.size() is 0.\n";
+        return false;
+    }
+
+    // step 02. convert to real_1d_array
+    real_1d_array x, y, z, s;
+    int n = xarray.size();
+    x.setcontent(n, xarray.data());
+    y.setcontent(n, yarray.data());
+    z.setcontent(n, zarray.data());
+    s.setcontent(n, sarray.data());
+
+    // step 03. begin spline 1d fit
+    spline1dinterpolant spline_x, spline_y, spline_z;
+    spline1dfitreport rep_x, rep_y, rep_z;
+    spline1dfit(s, x, _base_function_num, _lambdans, spline_x, rep_x);
+    spline1dfit(s, y, _base_function_num, _lambdans, spline_y, rep_y);
+    spline1dfit(s, z, _base_function_num, _lambdans, spline_z, rep_z);
+
+    // step 04. prepare parameters
+    double smin = sarray.front();
+    double smax = sarray.back();
+    int cnt = (int)(smax / density);
+    double step = (smax - smin) / cnt;
+
+    // step 05. calculate the spline with density
+    result.resize(3, std::vector<double>(0.0));
+    result.at(0).reserve(cnt + 1);
+    result.at(1).reserve(cnt + 1);
+    result.at(2).reserve(cnt + 1);
+    for(int i = 0; i <= cnt; i++){
+        double si = smin + i * step;
+        result.at(0).push_back(spline1dcalc(spline_x, si));
+        result.at(1).push_back(spline1dcalc(spline_y, si));
+        result.at(2).push_back(spline1dcalc(spline_z, si));
+    }
+    return true;
+}
+
 bool AlglibSplineFitting::fitting_param(
     const std::vector<double>& xarray, 
     const std::vector<double>& yarray, 
     const std::vector<double>& zarray,
     std::vector<std::vector<double>>& result,
-    int density)
+    double density)
 {
     // step 01. calculate sarray
     std::vector<double> sarray;
@@ -80,7 +129,7 @@ bool AlglibSplineFitting::fitting_normal(
     const std::vector<double>& yarray, 
     const std::vector<double>& zarray,
     std::vector<std::vector<double>>& result,
-    int density)
+    double density)
 {
     // step 01. convert to real_1d_array
     real_1d_array x, y, z;
