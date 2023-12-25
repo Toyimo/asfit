@@ -1,6 +1,12 @@
 # ALGLIB Spline Fitting Library
 
-ALGLIB Spline Fitting Library
+This library provide 2 method for spline fitting, which named AlglibSplineFitting and ConcaveHullParamSplineFitting.   
+1. AlglibSplineFitting support the spline with y=f(x) form and x must be monotonous.
+![Spline Fitting with ALGLIB](doc/penspline_demo.gif)
+2. ConcaveHullParamSplineFitting support fitting unordered point cloud in any form.
+![Concave Hull Parameter Spline Fitting](doc/chp_spline_fitting.png)
+
+ALGLIB. [Linear/nonlinear least squares](https://www.alglib.net/interpolation/leastsquares.php#splinefit)
 
 ## File Structure  
 
