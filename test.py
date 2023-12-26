@@ -14,5 +14,6 @@ def xy_2_line(input, output):
             geojson.dump(feature, of)
 
 # xy_2_line("build/frenet_reference_line.txt", "build/frenet_reference_line.geojson")
-xy_2_line("build/output.txt", "build/spline.geojson")
-# xy_2_line("build/output-3.txt", "build/spline-4.geojson")
+# xy_2_line("build/output.txt", "build/spline.geojson")
+# xy_2_line("build/debug.txt", "build/debug.geojson")
+xy_2_line("build/output-5.txt", "build/spline-5.geojson")

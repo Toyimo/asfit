@@ -205,7 +205,7 @@ int main(int argc, char **argv)
     // step 01. read and convert the data
     std::list<double> x_list, y_list, z_list;
     std::vector<double> x_vec, y_vec, z_vec, s_vec;
-    if (!reader("lane_pointcloud3.txt", x_list, y_list, z_list))
+    if (!reader("lane_pointcloud5.txt", x_list, y_list, z_list))
         return 0;
     convertor(x_list, x_vec);
     convertor(y_list, y_vec);

@@ -7,6 +7,7 @@
 #include <tuple>
 #include <unordered_set>
 #include <unordered_map>
+#include <fstream>
 
 /* Less Function */
 struct PointLess
@@ -148,7 +149,7 @@ bool ConcaveHullParamSplineFitting::generate_reference_line_with_concave_hull(
     // summing the convex angle with slidding window
     concave_geom.pop_back(); 
     size_t sws = size_t(concave_geom.size() * 0.05);
-    sws = sws > 5 ? sws : 5;
+    sws = sws > 10 ? sws : 10;
     sws = sws < 100 ? sws : 100;
     size_t n = concave_geom.size();
     for(size_t i = 0; i < concave_geom.size(); i++){
@@ -163,6 +164,16 @@ bool ConcaveHullParamSplineFitting::generate_reference_line_with_concave_hull(
         }
         pt.attributes["max_delta"] = std::fabs(std::fmod(max_delta, 360));
     }
+
+    // std::ofstream opt_file("debug.txt");
+    // if(opt_file.is_open()){
+    //     for(auto& pt : concave_geom){
+    //         opt_file << 
+    //         std::to_string(pt.x) << " " << std::to_string(pt.y) << " "
+    //         << std::to_string(pt.attributes["max_delta"])
+    //         << std::endl;
+    //     }
+    // }
 
     // process the SW group
     size_t index = 0;
@@ -180,6 +191,11 @@ bool ConcaveHullParamSplineFitting::generate_reference_line_with_concave_hull(
     std::list<std::tuple<size_t, size_t>> sw_group = split_vector_with_order_tolerance(
         sws_indices, std::ceil(sws / 2)
     );
+    if(sw_group.size() < 2){
+        std::cout << "ERROR.ConcaveHullParamSplineFitting::generate_reference_line_with_concave_hull: "
+                  << "sliding window group size < 2." << std::endl;
+        return false;
+    }
 
     // get the represent window
     std::unordered_map<size_t, asfit::Point*> polar_points;
@@ -202,6 +218,11 @@ bool ConcaveHullParamSplineFitting::generate_reference_line_with_concave_hull(
             target_id = size_t(index + std::ceil(sws * 0.5)) % n;
         }
         polar_points.insert({target_id, &concave_geom.at(target_id)});
+    }
+    if(polar_points.size() < 2){
+        std::cout << "ERROR.ConcaveHullParamSplineFitting::generate_reference_line_with_concave_hull: "
+                  << "polar size < 2." << std::endl;
+        return false;
     }
 
     // get the ideal polar point
