@@ -148,7 +148,7 @@ bool ConcaveHullParamSplineFitting::generate_reference_line_with_concave_hull(
 
     // summing the convex angle with slidding window
     concave_geom.pop_back(); 
-    size_t sws = size_t(concave_geom.size() * 0.05);
+    size_t sws = size_t(concave_geom.size() * 0.2);
     sws = sws > 10 ? sws : 10;
     sws = sws < 100 ? sws : 100;
     size_t n = concave_geom.size();
@@ -165,15 +165,15 @@ bool ConcaveHullParamSplineFitting::generate_reference_line_with_concave_hull(
         pt.attributes["max_delta"] = std::fabs(std::fmod(max_delta, 360));
     }
 
-    // std::ofstream opt_file("debug.txt");
-    // if(opt_file.is_open()){
-    //     for(auto& pt : concave_geom){
-    //         opt_file << 
-    //         std::to_string(pt.x) << " " << std::to_string(pt.y) << " "
-    //         << std::to_string(pt.attributes["max_delta"])
-    //         << std::endl;
-    //     }
-    // }
+    std::ofstream opt_file("debug-concave.txt");
+    if(opt_file.is_open()){
+        for(auto& pt : concave_geom){
+            opt_file << 
+            std::to_string(pt.x) << " " << std::to_string(pt.y) << " "
+            << std::to_string(pt.attributes["max_delta"])
+            << std::endl;
+        }
+    }
 
     // process the SW group
     size_t index = 0;
@@ -297,6 +297,22 @@ bool ConcaveHullParamSplineFitting::generate_reference_line_with_concave_hull(
         }
         reference_line.data.push_back(pt);
     }
+
+    // std::ofstream opt_file("debug-reference-line.txt");
+    // if(opt_file.is_open()){
+    //     std::vector<asfit::Point> out;
+    //     reference_line.douglas_peuker(out, 0.3);
+    //     for(auto& pt : out){
+    //         opt_file << 
+    //         std::to_string(pt.x) << " " << std::to_string(pt.y) << " "
+    //         << std::to_string(pt.attributes["max_delta"])
+    //         << std::endl;
+    //     }
+    // }
+
+    std::vector<asfit::Point> out;
+    reference_line.douglas_peuker(out, 0.3);
+    reference_line.data.swap(out);
 
     if(reference_line.data.size() < 2){
         std::cout << "ERROR.chp_spline_fitting.cpp::generate_reference_line_with_concave_hull(): reference line size < 2.\n";

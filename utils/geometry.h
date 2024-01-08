@@ -56,6 +56,10 @@ namespace asfit
     class Polyline
     {
     public:
+        void douglas_peuker(std::vector<Point>& out, const double& epsilon = 0.1);
+    private:
+        void douglas_peuker(const std::vector<Point>& points, int start_index, int end_index, double epsilon, std::vector<Point>& out);
+    public:
         std::vector<Point> data;
     };
 }

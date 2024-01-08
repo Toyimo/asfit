@@ -205,7 +205,7 @@ int main(int argc, char **argv)
     // step 01. read and convert the data
     std::list<double> x_list, y_list, z_list;
     std::vector<double> x_vec, y_vec, z_vec, s_vec;
-    if (!reader("lane_pointcloud5.txt", x_list, y_list, z_list))
+    if (!reader("lane_pointcloud10.txt", x_list, y_list, z_list))
         return 0;
     convertor(x_list, x_vec);
     convertor(y_list, y_vec);
@@ -216,20 +216,22 @@ int main(int argc, char **argv)
     // AlglibSplineFitting splinefitting;
     // splinefitting.lambdans() = lambdans;
     // splinefitting.base_function_num() = base_function_num;
-    // if (!splinefitting.fitting(x_vec, y_vec, z_vec, result, AlglibSplineFitting::ASF_NORMAL)){
+    // if (!splinefitting.fitting(x_vec, y_vec, z_vec, result, AlglibSplineFitting::ASF_NORMAL, 3)){
     //     std::cout << "ERROR: alglib spline fitting failed.\n";
+    //     return 0;
     // }
-    // writer("output.txt", result);
+    // writer("output-8.txt", result);
 
     // step 03. use chp class
     std::vector<std::vector<double>> result;
     ConcaveHullParamSplineFitting splinefitting;
     splinefitting.lambdans() = lambdans;
     splinefitting.base_function_num() = base_function_num;
-    if (!splinefitting.fitting(x_vec, y_vec, z_vec, result)){
+    if (!splinefitting.fitting(x_vec, y_vec, z_vec, result, 3)){
         std::cout << "ERROR: chp spline fitting failed.\n";
+        return 0;
     }
-    writer("output-5.txt", result);
+    writer("output-10.txt", result);
 
     return 0;
 }

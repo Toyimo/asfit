@@ -76,3 +76,43 @@ double Point::get_length_to_segment(const Point& p0, const Point& p1, double& ds
         return get_length_to_pt(p1);
     }
 }
+
+void Polyline::douglas_peuker(std::vector<Point>& out, const double& epsilon)
+{
+    return douglas_peuker(data, 0, data.size() - 1, epsilon, out);
+}
+
+void Polyline::douglas_peuker(
+    const std::vector<Point>& points, 
+    int start_index, int end_index, double epsilon, 
+    std::vector<Point>& out)
+{
+if (end_index <= start_index) { return; }
+
+    double dmax = 0;
+    int index = 0;
+
+    const Point& start = points[start_index];
+    const Point& end = points[end_index];
+
+    for (int i = start_index + 1; i < end_index; i++) {
+        double d = points[i].get_length_to_line(start, end);
+        if (d > dmax) {
+            index = i;
+            dmax = d;
+        }
+    }
+
+    if (dmax > epsilon) {
+        std::vector<Point> recResults1;
+        std::vector<Point> recResults2;
+        douglas_peuker(points, start_index, index, epsilon, recResults1);
+        douglas_peuker(points, index, end_index, epsilon, recResults2);
+
+        out.insert(out.end(), recResults1.begin(), recResults1.end() - 1);
+        out.insert(out.end(), recResults2.begin(), recResults2.end());
+    } else {
+        out.push_back(start);
+        out.push_back(end);
+    }
+}
