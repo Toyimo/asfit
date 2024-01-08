@@ -165,15 +165,15 @@ bool ConcaveHullParamSplineFitting::generate_reference_line_with_concave_hull(
         pt.attributes["max_delta"] = std::fabs(std::fmod(max_delta, 360));
     }
 
-    std::ofstream opt_file("debug-concave.txt");
-    if(opt_file.is_open()){
-        for(auto& pt : concave_geom){
-            opt_file << 
-            std::to_string(pt.x) << " " << std::to_string(pt.y) << " "
-            << std::to_string(pt.attributes["max_delta"])
-            << std::endl;
-        }
-    }
+    // std::ofstream opt_file("debug-concave.txt");
+    // if(opt_file.is_open()){
+    //     for(auto& pt : concave_geom){
+    //         opt_file << 
+    //         std::to_string(pt.x) << " " << std::to_string(pt.y) << " "
+    //         << std::to_string(pt.attributes["max_delta"])
+    //         << std::endl;
+    //     }
+    // }
 
     // process the SW group
     size_t index = 0;
