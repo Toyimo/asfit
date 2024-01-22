@@ -15,6 +15,6 @@ def xy_2_line(input, output):
 
 # xy_2_line("build/frenet_reference_line.txt", "build/frenet_reference_line.geojson")
 # xy_2_line("build/output.txt", "build/spline.geojson")
-xy_2_line("build/output-10.txt", "build/spline-10.geojson")
-xy_2_line("build/debug-concave.txt", "build/debug-concave.geojson")
-xy_2_line("build/debug-reference-line.txt", "build/debug-reference-line.geojson")
+xy_2_line("build/output-11.txt", "build/spline-11.geojson")
+# xy_2_line("build/debug-concave.txt", "build/debug-concave.geojson")
+# xy_2_line("build/debug-reference-line.txt", "build/debug-reference-line.geojson")

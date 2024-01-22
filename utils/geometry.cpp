@@ -30,7 +30,10 @@ double Point::convex(const Point& front, const Point& back) const
     Vector front_p = *this - front;
     Vector p_back = back - *this;
     double sign_tag = sign(front_p.cross(p_back));
-    return sign_tag * std::acos(front_p.dot(p_back) / (front_p.norm() * p_back.norm()));
+    double cos_value = front_p.dot(p_back) / (front_p.norm() * p_back.norm());
+    if(cos_value > 1.0) return 0.0f;
+    if(cos_value < -1.0) return M_PI;
+    return sign_tag * std::acos(cos_value);
 }
 
 double Point::get_length_to_pt(const Point& other) const

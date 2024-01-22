@@ -170,7 +170,8 @@ bool ConcaveHullParamSplineFitting::generate_reference_line_with_concave_hull(
     //     for(auto& pt : concave_geom){
     //         opt_file << 
     //         std::to_string(pt.x) << " " << std::to_string(pt.y) << " "
-    //         << std::to_string(pt.attributes["max_delta"])
+    //         << std::to_string(pt.attributes["angle"]) << " "
+    //         << std::to_string(pt.attributes["max_delta"]) 
     //         << std::endl;
     //     }
     // }
